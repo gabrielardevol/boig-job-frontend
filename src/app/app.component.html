@@ -1,0 +1,23 @@
+<confetti-layout >
+  <nav nav style="background: white; border-bottom: 1px solid black; padding: 16px;">
+  Job hunter
+  </nav>
+  <main main style="background: yellow; position: relative; min-height: calc(100vh - 51px); display: flex; flex-flow: column">
+
+<!--    <button (click)="openModal()">open modal</button>-->
+<!--    <div #modalContainer>modalcontainer</div>-->
+    <router-outlet></router-outlet>
+  </main>
+  <aside aside style="background: white; border-right: 1px solid black; padding: 8px; height: calc(100vh - 68px);">
+    <button  [routerLink]="['/']">dashboard</button>
+    <br>
+    <button  [routerLink]="['/addApplication']">new application</button>
+    <br>
+    <button [routerLink]="['/addResponse']">new response</button>
+    <br>
+    <button [routerLink]="['/applicationList']">see all applications</button>
+    <br>
+    <button [routerLink]="['/calendar']">calendar</button>
+  </aside>
+  <div menu>menu</div>
+</confetti-layout>

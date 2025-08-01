@@ -1,0 +1,29 @@
+<form #jobForm="ngForm" (ngSubmit)="onSubmit(jobForm.value)"
+      style="display: flex; flex-flow: column; width: 180px;"
+>
+  <label>
+    Text:
+    <textarea id="text" name="text" rows="5" cols="33" ngModel (ngModelChange)="onPromptTextChange(jobForm.value.text)">
+      Introduce text
+    </textarea>
+  </label>
+
+  <label for="offer">Offer:</label>
+  <select name="offer" id="offer" [(ngModel)]="selectedOffer">
+    <option *ngFor="let offer of offers" [value]="'/api/offers/' + offer.id">
+      {{ offer.company }} | {{ offer.role }}
+    </option>
+  </select>
+
+
+  <label>
+    Company:
+    <input type="text" name="company" ngModel required>
+  </label>
+  <label>
+    Type:
+    <input type="text" name="type" ngModel required />
+  </label>
+
+  <button type="submit">Submit</button>
+</form>

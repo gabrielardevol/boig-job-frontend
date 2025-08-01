@@ -1,0 +1,59 @@
+
+<div style="background: blue; display: flex; flex-flow: column; min-height: calc(100vh - 51px)">
+
+  <div style="position: sticky; display: flex; gap: 6px; top: 51px; padding: 8px; border-bottom: 1px solid black;  background: white; width: 100%">
+    <button (click)="viewType = 'mozaik'">mozaik view</button>
+    <button (click)="viewType = 'table'">table view</button>
+    <div>Sort by
+      <select name="sortBy" #sortSelector (change)="sortOffers()">
+        <option value="appliedAt" selected>Date</option>
+        <option value="company">Company</option>
+        <option value="state">State</option>
+      </select>
+    </div>
+
+  </div>
+
+  <div *ngIf="viewType === 'mozaik' && !loading" style="flex: 1; display: grid; grid-template-columns: 1fr 1fr 1fr 1fr; gap: 1px; background: black">
+    <div *ngFor="let offer of offers" style="display: flex; flex-flow: column; background: white;
+  padding: 6px"
+         [style.color]="offer.state == 'inProcess' ? 'blue' : offer.state == 'rejected' ? 'red' : 'black'"
+         [style.outline]="offer.state == 'inProcess' ? '1px solid blue' : offer.state == 'rejected' ? '1px solid red' : ''"
+    >
+      {{ offer.company }}
+      <br>
+      {{ offer.role }}
+      <br>
+      {{ offer.appliedAt }}
+      <br>
+      {{ offer.state }}
+    </div>
+  </div>
+  <table *ngIf="viewType === 'table'  && !loading" style="width: 100%; flex: 1">
+    <thead>
+    <tr>
+      <th>company</th>
+      <th>role</th>
+      <th>state</th>
+      <th>appliedAt</th>
+    </tr>
+    </thead>
+    <tbody>
+    <tr *ngFor="let offer of offers" >
+      <td>  {{ offer.company }}</td>
+      <td>   {{ offer.role }}</td>
+      <td> {{ offer.state }}</td>
+      <td> {{ offer.appliedAt }}</td>
+    </tr>
+    </tbody>
+  </table>
+  <div *ngIf="loading" style="flex: 1; height: 100%; width: 100%; background: red; display: flex; justify-content: center; align-items: center">
+    loading
+  </div>
+  <div style="background: white; border-top: 1px solid black; padding: 8px; position: sticky; bottom: 0; width: 100%;">
+    <button *ngIf="totalOffers > page * itemsPerPage" (click)="loading = true; page = page + 1; callApi()">next</button>
+    &nbsp; &nbsp; &nbsp;
+    <button *ngIf="page > 1" (click)="loading = true; page = page - 1; callApi()">prev</button>
+  </div>
+
+</div>
