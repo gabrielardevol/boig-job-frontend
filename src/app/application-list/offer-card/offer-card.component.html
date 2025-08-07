@@ -1,0 +1,16 @@
+<div style="padding: 6px; display: flex; flex-flow: column; height: 100%; box-sizing: border-box" class="card"
+     [style.color]="offer!.state == 3 ? 'blue' : offer!.state == 2 ? 'red' : 'black'"
+     [style.outline]="offer!.state == 3 ? '1px solid blue' : offer!.state == 2 ? '1px solid red' : ''"
+>
+  <div style="display: flex; justify-content: space-between">
+    <b>{{ offer!.company }}</b> &nbsp;
+    <span style="display: inline-block; font-size: smaller; padding: 0 7px 2px 7px; border-radius: 20px; height: fit-content" [style.outline]="offer!.state == 3 ? '1px solid blue' : offer!.state == 2 ? '1px solid red' : '1px solid black'"
+    >
+      {{ statusList[offer!.state - 1] }}
+      </span>
+  </div>
+  <p style="font-size: small; padding: 0; margin: 0">
+    {{ offer!.role }} <br>
+    {{ offer!.appliedAt.toString().slice(0, 10) }}
+  </p>
+</div>

@@ -1,0 +1,11 @@
+<h2>
+  {{assignment.name}}
+</h2>
+<h3>[offer]</h3>
+<p>
+  {{assignment.date}}
+</p>
+<p>
+  {{assignment.message}}
+</p>
+<app-comment-input [context]="'assignment'" [id]="assignment.id!"></app-comment-input>

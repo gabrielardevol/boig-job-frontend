@@ -1,73 +1,98 @@
 <form #jobForm="ngForm" (ngSubmit)="onSubmit(jobForm.value)"
-style="display: flex; flex-flow: column; width: 180px;"
+      style="display: flex; position: relative; flex-flow: column; max-height: 70vh; overflow: hidden auto"
 >
-  <label>
-    Text:
-    <textarea id="text" name="text" rows="5" cols="33" ngModel (ngModelChange)="jobForm.value.text != ''  ? onPromptTextChange(jobForm.value.text) : null">
-      Introduce text
-    </textarea>
-  </label>
+  <app-modal-layout>
+    <main main style="display: flex; flex-flow: column; padding: 20px; gap: 8px;">
 
-  <label>
-    Company:
-    <input type="text" name="company" ngModel required />
-  </label>
+      <label>
+        <div class="textarea-wrapper" style="margin: auto">
+          <div style=" font-size: smaller; position: relative; z-index: 2; padding: 2px 2px 4px 4px; color: white; font-weight: bold">
+            Auto-fill with AI:
+          </div>
+          <textarea placeholder="✨Copy-paste the offer here" id="text" name="text" rows="6" cols="60" ngModel
+                    (ngModelChange)="jobForm.value.text != ''  ? onPromptTextChange(jobForm.value.text) : null">
+          </textarea>
+        </div>
+      </label>
 
-  <label>
-    Role:
-    <input type="text" name="role" ngModel required />
-  </label>
+      <div style="display: grid; grid-template-columns: 1fr 1fr; gap: 8px;">
+        <label>
+          Company:
+          <input type="text" name="company" ngModel required/>
+        </label>
 
-  <label>
-    Experience mínimum:
-    <input type="text" name="experienceMinimum" ngModel />
-  </label>
+        <label>
+          Role:
+          <input type="text" name="role" ngModel required/>
+        </label>
+
+        <label>
+          Experience mínimum:
+          <input type="text" name="experienceMinimum" ngModel/>
+        </label>
 
 
-  <label>
-    Experience maximum:
-    <input type="text" name="experienceMaximum" ngModel />
-  </label>
+        <label>
+          Experience maximum:
+          <input type="text" name="experienceMaximum" ngModel/>
+        </label>
 
-  <label>
-    Skills:
-    <input type="text" name="skills" ngModel placeholder="Comma-separated" />
-  </label>
+        <label>
+          Skills:
+          <input type="text" name="skills" ngModel placeholder="Comma-separated"/>
+        </label>
 
-  <label>
-    Salary Minimum:
-    <input type="number" name="salaryMinimum" ngModel />
-  </label>
+        <label>
+          Salary Minimum:
+          <input type="number" name="salaryMinimum" ngModel/>
+        </label>
 
-  <label>
-    Salary Maximum:
-    <input type="number" name="salaryMaximum" ngModel />
-  </label>
+        <label>
+          Salary Maximum:
+          <input type="number" name="salaryMaximum" ngModel/>
+        </label>
 
-  <label>
-    Contract type:
-    <input type="text" name="contractType" ngModel />
-  </label>
+        <label for="contractType" class="display: flex; flex-flow: column">
+          Job Type:
+        <select name="contractType" ngModel id="contractType">
+          <option value="permanent">Permanent</option>
+          <option value="temporary">Temporary</option>
+          <option value="part-time">Part-Time</option>
+          <option value="full-time">Full-Time</option>
+          <option value="internship">Internship</option>
+          <option value="freelance">Freelance</option>
+          <option value="project-based">Project-Based</option>
+          <option value="consultant">Consultant</option>
+        </select>
+        </label>
 
-  <label>
-    Recruiter:
-    <input type="text" name="recruiter" ngModel />
-  </label>
+        <label>
+          Recruiter:
+          <input type="text" name="recruiter" ngModel/>
+        </label>
 
-  <label>
-    Platform:
-    <input type="text" name="platform" ngModel />
-  </label>
+        <label>
+          Platform:
+          <input type="text" name="platform" ngModel/>
+        </label>
 
-  <label>
-    Location:
-    <input type="text" name="location" ngModel />
-  </label>
+        <label>
+          Location:
+          <input type="text" name="location" ngModel/>
+        </label>
 
-  <label>
-    Typology (remote, hybrid, both):
-    <input type="text" name="typology" ngModel />
-  </label>
-
-  <button type="submit">Submit</button>
+        <label>
+          Typology (remote, hybrid, both):
+          <input type="text" name="typology" ngModel/>
+        </label>
+      </div>
+    </main>
+    <nav nav style="display: flex; gap: 8px;">
+      <button (click)="close.emit('')" style="background-color: var(--border-color)">Cancel</button>
+      <button type="submit"> {{
+          !submitting ? 'Submit' : 'Submitting'
+        }}
+      </button>
+    </nav>
+  </app-modal-layout>
 </form>

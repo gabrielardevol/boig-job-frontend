@@ -17,15 +17,11 @@ export class LlmApiService {
   Offer {
   company: string,
   role: string,
-  experience: {
-    minimum: number,
-    maximum: number
-  }
+  experienceMinimum: number,
+  experienceMaximum: number,
+  salaryMinimum: number,
+  salaryMaximum: number,
   skills: string[],
-  salaryRange: {
-    minimum: number,
-    maximum: number
-  },
   contractType: 'permanent' | 'temporary' | 'part-time' | 'full-time' | 'internship' | 'freelance' | 'project-based' | 'consultant',,
   recruiter: string,
   location: string,
@@ -37,10 +33,10 @@ export class LlmApiService {
   {
   "company": "BlinkLearning",
   "role": "Full stack developer",
-  "experience": {
-    "minimum": 0.6,
-    "maximum": 1
-  },
+ experienceMinimum: 1,
+  experienceMaximum: 2,
+  salaryMinimum: 24.000,
+  salaryMaximum: 28.000,
   "skills": [
     "PHP",
     "JavaScript",
@@ -54,10 +50,6 @@ export class LlmApiService {
     "Linux",
     "AWS"
   ],
-  "salaryRange": {
-    "minimum": 34K,
-    "maximum": 40K
-  },
   "contractType": "temporary",
    "platform": Indeed,
   location: Reus, Spain,
@@ -102,11 +94,13 @@ export class LlmApiService {
         success: true,
         output: JSON.parse(res?.choices?.[0]?.message?.content?.trim() || ''),
       })),
-      catchError((error) =>
-        of({
-          success: false,
-          error: error?.error?.error?.message || error.message || 'Unknown error',
-        })
+      catchError((error) => {
+          console.error(error);
+          return of({
+            success: false,
+            error: error?.error?.error?.message || error.message || 'Unknown error',
+          })
+        }
       )
     );
   }
@@ -121,7 +115,7 @@ export class LlmApiService {
           content: `
           the user has received an email from a company they have applied to. You will return a json object, with no annotation or comment aside. It has to be like:
           {
-                type: 'rejection' | 'confirmation' | 'interview' | 'employmentOffer';
+                type: 'rejection' | 'confirmation' | 'interview' | 'employmentOffer' | 'assignment';
                 company: string;
                 role: string;
 

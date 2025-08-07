@@ -1,26 +1,74 @@
-<!--<div style="display: flex; flex-wrap: wrap; gap: 3px;">-->
-<!--  <div *ngFor="let skill of skills.slice(0, 12)" style="background: #d9d9d9;">-->
-<!--    {{skill.skill}}-->
-<!--    {{skill.count}}-->
-<!--  </div>-->
-<!--</div>-->
+<nav
+  style="position: sticky;
+  top: var(--navbar-height);
+  left: 0;
+  background: var(--background-color);
+  display: flex;
+  gap: 8px;
+  padding: 8px;
+  z-index: 2;
+  border-bottom: 1px solid var(--border-color);
+  justify-content: end">
+  <label name="date-initial"><input type="date"></label>
+  <label name="date-end"><input type="date"></label>
+</nav>
 
-<!--<div *ngFor="let day of offersByDay" style="border: 1px solid black;">-->
-<!--  {{day.day}}-->
-<!--  {{day.count}}-->
-<!--</div>-->
-<div style=" width: 100%; gap: 1px; background: black; height: calc(100vh - 51px); position: relative">
-  <div style="position: absolute; top: 0; bottom: 0; right: 0; left: 0; height: 100%; width: 100%; display: flex; flex-flow: row; gap: 1px;  background: black">
+<div style="height: calc(100vh - var(--navbar-height) - 53px); margin: 8px; position: relative">
+
+  <div
+    style="border-radius: 8px; border: 1px solid var(--border-color); overflow: hidden; height: calc(100%); width: 100%; display: flex; flex-flow: row; "
+    [style.gap]="GAP">
+
     <div style="position: relative; height: 100%; flex: 2">
-      <div style="position: absolute; top: 0; bottom: 0; right: 0; left: 0; background: white">
-        <app-line-chart style="flex: 2; "></app-line-chart>
+
+      <div [style.gap]="GAP"
+           style="position: absolute; top: 0; bottom: 0; right: 0; left: 0;display: flex; flex-flow: column;">
+
+        <div style="display: flex;" [style.gap]="GAP">
+          <style>
+            span {
+              display: block;
+              font-size: 12px;
+            }
+
+            .kpi.card {
+              background: linear-gradient(155deg, white 25%, var(--background-color) 100%);
+              flex: 1;
+              padding: 6px 8px;
+            }
+
+            div span:first-child {
+              font-size: 1rem;
+            }</style>
+          <div class="kpi card"><span>{{ kpiData['totalApplications'] }}</span> <span>Applications</span>
+          </div>
+          <div class="kpi card">
+            <span>{{ kpiData['totalFirstInterviews'] + kpiData['totalRejections'] }}</span> <span>Responses</span></div>
+          <div class="kpi card"><span>{{ kpiData['totalInterviews'] }}</span> <span>Interviews</span>
+          </div>
+          <div class="kpi card">
+            <span>{{ (((kpiData['totalFirstInterviews'] + kpiData['totalRejections']) / kpiData['totalApplications']) * 100).toFixed(2) }}
+              %</span> <span>Response rate</span>
+          </div>
+          <!--          <div style="flex: 1; padding: 12px;" class="kpi card">-->
+          <!--            <span>{{ kpiData['totalFirstInterviews'] / kpiData['totalFirstInterviews'] + kpiData['totalRejections'] }}</span>-->
+          <!--            <span>Positive response rate</span>-->
+          <!--          </div>-->
+
+        </div>
+        <app-chart [offers]="offersByDay" [responses]="responsesByDay" style="flex: 1; background: white"
+                   class="card"></app-chart>
+
       </div>
     </div>
-      <div style="flex: 1; position: relative; background: white; height: 100%">
-        <div style="position: absolute; top: 0; bottom: 0; right: 0; left: 0; height: 100%; display: flex; flex-flow: column; background: black; gap: 1px;">
-          <app-chart style="flex: 1; background: white"></app-chart>
-          <app-pie-chart style="flex: 1; background: white;"> </app-pie-chart>
-        </div>
+    <div style="flex: 1; position: relative; height: 100%">
+      <div
+        style="position: absolute; top: 0; bottom: 0; right: 0; left: 0; height: 100%; display: flex; flex-flow: column;"
+        [style.gap]="GAP">
+        <app-line-chart [data]="offersByDay" style="flex: 1;" class="card"></app-line-chart>
+
+        <app-pie-chart style="flex: 1;" class="card"></app-pie-chart>
+      </div>
     </div>
   </div>
 </div>

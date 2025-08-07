@@ -1,0 +1,11 @@
+<h2>
+  {{interview.title}}
+</h2>
+<h3>[offer]</h3>
+<p>
+  {{interview.date}}
+</p>
+<p>
+  {{interview.description}}
+</p>
+<app-comment-input [context]="'interview'" [id]="interview.id!"></app-comment-input>

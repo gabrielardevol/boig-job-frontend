@@ -1,4 +1,131 @@
-/* You can add global styles to this file, and also import other style files */
+:root {
+  --main-color: #64938c;
+  --background-color: #e2eded;
+  --border-color : var(--main-color);
+  --card: #ededed;
+  --text-color: #00373e;
+  --navbar-height: 41px;
+}
+
+@import url('https://fonts.googleapis.com/css2?family=Roboto+Mono:ital,wght@0,100..700;1,100..700&display=swap');
+* {
+  box-sizing: border-box;
+}
+
 body {
   margin: 0;
+  font-family: "Roboto Mono", sans-serif;
+  color: var(--text-color);
+}
+
+button {
+  background: var(--text-color);
+  color: white;
+  border: none;
+  padding: 8px 16px;
+}
+
+.card {
+  background: white;
+  border-radius: 4px;
+  outline: 1px solid color-mix(in srgb, var(--border-color) 60%, var(--card) 40%);
+  overflow: hidden
+}
+
+label {
+  font-size: 12px;
+  input , selector {
+    display: block;
+    width: 100%;
+  }
+
+  textarea {
+    display: block;
+  }
+}
+
+textarea {
+  position: relative;
+  background: rgba(255, 255, 255, 0.85);
+  outline: none;
+  width: calc(100%);
+  border: 1px solid white;
+}
+
+textarea, input, select {
+  padding: 6px;
+}
+
+input, select {
+  border: 1px solid var(--border-color);
+  background: transparent;
+  mix-blend-mode: multiply;
+}
+
+textarea, input, select, button {
+  border-radius: 6px;
+}
+
+.textarea-wrapper {
+  width: fit-content;
+  position: relative;
+}
+
+.textarea-wrapper::before {
+  border-radius: 8px;
+  position: absolute;
+  top: -3px;
+  right: 0;
+  left: -3px;
+  bottom: -3px;
+  padding: 3px;
+  background: linear-gradient(135deg, var(--main-color), var(--text-color));
+  content: '';
+  width: 100%;
+  height: 100%;
+}
+
+hr {
+  width: 100%;
+}
+
+::-webkit-scrollbar {
+  width: 9px;
+}
+
+::-webkit-scrollbar-track {
+  background: var(--border-color);
+}
+
+::-webkit-scrollbar-thumb {
+  background: color-mix(in srgb, #ffffff 80%, var(--main-color) 20%);
+  margin: 1px; padding: 1px;
+  box-sizing: border-box;
+  border-left: 1px solid var(--border-color);
+}
+
+::-webkit-scrollbar-thumb:hover {
+  background: white;
+}
+
+main nav.nav-styled {
+  backdrop-filter: blur(1px);
+  border-bottom: 1px solid var(--border-color);
+  border-top: 1px solid white;
+  background: color-mix(in srgb, var(--background-color) 84%, transparent 16%);
+  box-shadow: inset 0 8px 16px 0 var(--background-color);
+}
+
+.modal-backdrop {
+  width: 100%;
+  background: color-mix(in srgb, transparent 20%, var(--background-color) 80%);
+  position: sticky;
+  left: 0;
+  backdrop-filter: blur(1px);
+}
+
+.modal-outline {
+  outline: 2px solid white;
+  border: 1px solid var(--border-color);
+  border-radius: 16px;
 }

@@ -1,11 +1,12 @@
-import {Component, ViewChild} from '@angular/core';
-import {Offer, OfferResponse} from '../core/domain.models';
+import {Component, EventEmitter, Output, ViewChild} from '@angular/core';
+import {Assignment, Interview, Offer, OfferResponse} from '../core/domain.models';
 import {v4 as uuidv4} from 'uuid';
 import {FormsModule, NgForm, ReactiveFormsModule} from '@angular/forms';
-import {NgForOf} from '@angular/common';
+import {NgForOf, NgIf} from '@angular/common';
 import {HttpClient} from '@angular/common/http';
 import {LlmApiService} from '../core/llm.api';
 import {BackendApiService} from '../core/backend.api';
+import {ModalLayoutComponent} from '../shared/modal-layout/modal-layout.component';
 
 @Component({
   selector: 'app-add-response',
@@ -13,6 +14,8 @@ import {BackendApiService} from '../core/backend.api';
     FormsModule,
     ReactiveFormsModule,
     NgForOf,
+    NgIf,
+    ModalLayoutComponent,
   ],
   templateUrl: './add-response.component.html',
   styleUrl: './add-response.component.scss'
@@ -21,6 +24,8 @@ export class AddResponseComponent {
   @ViewChild('jobForm') jobForm!: NgForm;
   offers: { id: string, company: string, role: string }[] | Offer[] = []
   selectedOffer: string | undefined = undefined;
+  responseType: string | undefined = undefined;
+  @Output() close = new EventEmitter();
 
   constructor(private llmApi: LlmApiService, private backendApi: BackendApiService) {
   }
@@ -36,9 +41,34 @@ export class AddResponseComponent {
       id: id
     };
 
+    const interviewData: Interview = {
+      offer: this.selectedOffer!,
+      date: formValue.interviewDate,
+      title: formValue.interviewName,
+      description: formValue.text,
+    }
+
+    const assignmentData: Assignment = {
+      offer: this.selectedOffer!,
+      date: formValue.assignmentDate,
+      name: formValue.assignmentName,
+      message: formValue.text,
+      id: uuidv4()
+    }
+
     this.backendApi.createResponse(offerData).subscribe(
       response => console.log(response)
     )
+
+    if (formValue.type == 'interview') {
+      this.backendApi.newInterview(interviewData).subscribe(
+        response => console.log(response)
+      )
+    } else if (formValue.type == 'assignment') {
+      this.backendApi.newAssignment(assignmentData).subscribe(
+        response => console.log(response)
+      )
+    }
 
 
     //TECNICAL DEBT
@@ -70,13 +100,15 @@ export class AddResponseComponent {
       offerStateIndex = 5;
     }
 
-    this.backendApi.updateOffer(this.selectedOffer!, {'state': offerState}).then(
+    this.backendApi.updateOffer(this.selectedOffer!, {'state': offerStateIndex}).then(
       this.backendApi.newStatusChange(offerData.id, offerStateIndex).subscribe
     )
   }
 
   onPromptTextChange(text: string) {
     // fer la crida de la api
+    console.log(this.jobForm.value)
+
     this.llmApi.sendReply(text).subscribe(
       response => {
         this.jobForm.form.patchValue(response.output)

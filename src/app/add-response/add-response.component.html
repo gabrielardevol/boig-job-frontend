@@ -1,29 +1,66 @@
 <form #jobForm="ngForm" (ngSubmit)="onSubmit(jobForm.value)"
-      style="display: flex; flex-flow: column; width: 180px;"
+      style="display: flex; flex-flow: column; max-height: 70vh; overflow: auto"
 >
-  <label>
-    Text:
-    <textarea id="text" name="text" rows="5" cols="33" ngModel (ngModelChange)="onPromptTextChange(jobForm.value.text)">
+  <app-modal-layout>
+    <main main>
+      <label>
+        <div class="textarea-wrapper">
+
+    <textarea placeholder="✨Auto-fill with AI" id="text" name="text" rows="5" cols="33" ngModel (ngModelChange)="onPromptTextChange(jobForm.value.text)">
       Introduce text
     </textarea>
-  </label>
+        </div>
+      </label>
 
-  <label for="offer">Offer:</label>
-  <select name="offer" id="offer" [(ngModel)]="selectedOffer">
-    <option *ngFor="let offer of offers" [value]="'/api/offers/' + offer.id">
-      {{ offer.company }} | {{ offer.role }}
-    </option>
-  </select>
+      <label for="offer">Offer:
+        <select name="offer" id="offer" [(ngModel)]="selectedOffer">
+          <option *ngFor="let offer of offers" [value]="'/api/offers/' + offer.id">
+            {{ offer.company }} | {{ offer.role }}
+          </option>
+        </select>
+      </label>
+
+      <label>
+        Company:
+        <input type="text" name="company" ngModel required>
+      </label>
+      <label>
+        Type:
+        <input [(ngModel)]="responseType" type="text" name="type" ngModel required/>
+      </label>
+
+      <ng-container *ngIf="responseType === 'interview'">
+        <label>Interview</label>
+        <label>
+          Name:
+          <input ngModel type="text" name="interviewName">
+        </label>
+        <label>
+          Date:
+          <input ngModel type="datetime-local" name="interviewDate">
+        </label>
+        <!--    <label>-->
+        <!--      Description:-->
+        <!--      <input type="text" name="interviewDescription">-->
+        <!--    </label>-->
+      </ng-container>
+
+      <ng-container *ngIf="responseType === 'assignment'">
+        <label>Assignment</label>
+        <label>
+          Name:
+          <input ngModel type="text" name="assignmentName">
+          Due date:
+          <input ngModel type="datetime-local" name="assignmentDate">
+        </label>
+      </ng-container>
+
+    </main>
+    <nav nav style="display: flex; gap: 8px;">
+      <button (click)="close.emit('')">Cancel</button>
+      <button type="submit">Submit</button>
+    </nav>
+  </app-modal-layout>
 
 
-  <label>
-    Company:
-    <input type="text" name="company" ngModel required>
-  </label>
-  <label>
-    Type:
-    <input type="text" name="type" ngModel required />
-  </label>
-
-  <button type="submit">Submit</button>
 </form>

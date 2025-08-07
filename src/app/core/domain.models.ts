@@ -3,15 +3,11 @@ export interface Offer {
   text: string,
   company: string,
   role: string,
-  experience: {
-    minimum: number,
-    maximum: number
-  }
   skills: string[],
-  salaryRange: {
-    minimum: number,
-    maximum: number
-  }
+  experienceMinimum: number,
+  experienceMaximum: number,
+  salaryMinimum: number,
+  salaryMaximum: number,
   responses: Response[],
   appliedAt: Date,
   contractType:
@@ -20,24 +16,17 @@ export interface Offer {
   platform: string,
   location: string,
   typology: 'remote' | 'hybrid' | 'onsite',
-  state?: 'inProcess' | 'rejected' | 'waitingForResponse' | undefined,
+  state: number,
+  comments?: AppComment[]
 }
 
 export interface OfferResponse {
-  // confirmation means application has been received
-  // when response is  received, a corresponding application instance is sugested;
-  // meaning Response responds to that specific Application
-  // however, Application is not a required field
-  // due to the large amount of applications, it being required can affect user experience
-  // if type = interview, an interview date can be submitted to mark the calendar;
-  // if type = confirmation, ??????????
-  // if type = rejection , ????????
-  // if type = employmentOffer, ???????
   id: string;
   text: string;
-  type: 'rejection' | 'confirmation' | 'interview' | 'employmentOffer';
+  type: 'rejection' | 'confirmation' | 'interview' | 'employmentOffer' | 'assignment';
   offer?: Offer | string | null;
-  company?: string
+  company?: string;
+  originalContent?: string;
 }
 
 export interface Dashboard {
@@ -56,4 +45,40 @@ export interface Dashboard {
     second: number
   };
   rejections: number;
+}
+
+// export interface CalendarEvent {
+//   id: string,
+//   type: any,
+//   title: string,
+//   description: string,
+//   date: Date,
+// }
+export interface Interview {
+  id?: string,
+  offer: string,
+  title: string,
+  description: string,
+  date: Date,
+  comments?: AppComment[]
+
+}
+
+export interface Assignment {
+  id: string | number,
+  offer: string,
+  name: string,
+  date: Date,
+  message: string,
+  comments?: AppComment[]
+
+}
+
+export interface AppComment {
+  offer?: string,
+  interview?: string,
+  assignment?: string,
+  id?: string,
+  content: string,
+  createdAt?: string | Date,
 }

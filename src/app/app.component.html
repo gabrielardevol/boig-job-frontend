@@ -1,23 +1,55 @@
-<confetti-layout >
-  <nav nav style="background: white; border-bottom: 1px solid black; padding: 16px;">
-  Job hunter
-  </nav>
-  <main main style="background: yellow; position: relative; min-height: calc(100vh - 51px); display: flex; flex-flow: column">
+<div style="background: var(--background-color);">
 
-<!--    <button (click)="openModal()">open modal</button>-->
-<!--    <div #modalContainer>modalcontainer</div>-->
-    <router-outlet></router-outlet>
-  </main>
-  <aside aside style="background: white; border-right: 1px solid black; padding: 8px; height: calc(100vh - 68px);">
-    <button  [routerLink]="['/']">dashboard</button>
-    <br>
-    <button  [routerLink]="['/addApplication']">new application</button>
-    <br>
-    <button [routerLink]="['/addResponse']">new response</button>
-    <br>
-    <button [routerLink]="['/applicationList']">see all applications</button>
-    <br>
-    <button [routerLink]="['/calendar']">calendar</button>
-  </aside>
-  <div menu>menu</div>
-</confetti-layout>
+  <confetti-layout>
+    <main main
+          style="position: relative; min-height: calc(100vh - var(--navbar-height)); display: flex; flex-flow: column">
+      <div style="height: 0; position: sticky; top: var(--navbar-height); z-index: 3" (click)="closeModal()">
+        <div class="modal-backdrop" *ngIf="addApplication || addResponse"
+             style="top: 51px; height: calc(100vh - 51px); z-index: 3">
+          <confetti-fillers-container style="overflow: hidden">
+            <app-add-application class="card modal-outline" *ngIf="addApplication" (close)="closeModal()"
+                                 (click)="$event.stopPropagation()"></app-add-application>
+            <app-add-response class="card modal-outline" *ngIf="addResponse" (close)="closeModal()"
+                              (click)="$event.stopPropagation()"></app-add-response>
+          </confetti-fillers-container>
+        </div>
+      </div>
+      <router-outlet></router-outlet>
+    </main>
+
+    <nav nav style="
+      color: var(--border-color);
+      padding: 0 8px;
+      box-sizing: border-box;
+      display: flex;
+      align-items: center;
+      background: var(--background-color);
+      font-size: 1.3rem;
+      font-weight: bolder;
+      height: var(--navbar-height);
+      border-bottom: 1px solid var(--border-color);">
+      Job hunter
+    </nav>
+
+    <aside aside
+           style="display: flex;
+           flex-flow: column;
+           gap: 4px;
+           border-right: 1px solid var(--border-color);
+           height: calc(100vh - var(--navbar-height));
+           background: var(--background-color);">
+      <div style="display: flex; flex-flow: column; gap: 1px; background: var(--border-color)">
+        <button class="menu" [routerLink]="['/']">dashboard</button>
+
+        <button class="menu" [routerLink]="['/applicationList']">see all applications</button>
+        <button class="menu" [routerLink]="['/calendar']">calendar</button>
+
+      </div>
+      <button (click)="addApplication = true; addResponse = false;">new application</button>
+      <button (click)="addApplication = false; addResponse = true;">new response</button>
+    </aside>
+
+    <div menu>menu</div>
+
+  </confetti-layout>
+</div>

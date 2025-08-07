@@ -1,4 +1,4 @@
-import { Component } from '@angular/core';
+import {Component, Input} from '@angular/core';
 import {NgChartsModule} from 'ng2-charts';
 
 @Component({
@@ -9,6 +9,7 @@ import {NgChartsModule} from 'ng2-charts';
   templateUrl: './line-chart.component.html'
 })
 export class LineChartDemoComponent {
+  @Input() data: any;
   // lineChart
   public lineChartData:Array<any> = [
     {data: [65, 59, 80, 81, 56, 55, 40], label: 'Series A'},
@@ -47,6 +48,36 @@ export class LineChartDemoComponent {
     }
   ];
   public lineChartLegend:boolean = true;
+
+  ngOnChanges() {
+    if (!this.data || this.data.length === 0) return;
+    const parsedData = this.data.map((item: { day: string; count: number }) => ({
+      date: new Date(item.day),
+      value: item.count
+    }));
+    const dates = parsedData.map((d: { date: Date; value: number }) => d.date);
+    const minDate = new Date(Math.min(...dates.map((d: Date) => d.getTime())));
+    const maxDate = new Date(Math.max(...dates.map((d: Date) => d.getTime())));
+    const dateMap = new Map<string, number>();
+    parsedData.forEach((item: { date: Date; value: number }) => {
+      const key = item.date.toISOString().split('T')[0];
+      dateMap.set(key, item.value);
+    });
+    const allDates: string[] = [];
+    const allValues: number[] = [];
+    const currentDate = new Date(minDate);
+    while (currentDate <= maxDate) {
+      const key = currentDate.toISOString().split('T')[0];
+      allDates.push(key);
+      allValues.push(dateMap.get(key) ?? 0);
+      currentDate.setDate(currentDate.getDate() + 1);
+    }
+    this.lineChartData = [{
+      data: allValues, label: 'applications'
+    }]
+    this.lineChartLabels = allDates;
+  }
+
 
   public randomize():void {
     let _lineChartData:Array<any> = new Array(this.lineChartData.length);

@@ -1,0 +1,15 @@
+<h2>
+  {{offer.company}}
+</h2>
+<h3>{{offer.role}}</h3>
+<p>{{offer.appliedAt}}</p>
+<p>{{offer.state}}</p>
+<p>
+  {{offer.skills}}
+</p>
+<p>{{offer.text}}</p>
+
+<ng-container *ngFor="let comment of offer.comments">
+  {{comment}}
+</ng-container>
+<app-comment-input [context]="'offer'" [id]="offer.id"></app-comment-input>

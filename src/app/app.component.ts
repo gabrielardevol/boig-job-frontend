@@ -1,6 +1,6 @@
 import {Component, ViewChild, ViewContainerRef} from '@angular/core';
 import {RouterLink, RouterOutlet} from '@angular/router';
-import {ConfettiLayout, ModalComponent} from 'confettti';
+import {ConfettiLayout, FillersContainerComponent, ModalComponent} from 'confettti';
 import {AddApplicationComponent} from './add-application/add-application.component';
 import {AddResponseComponent} from './add-response/add-response.component';
 // import {ConfettiLayout} from 'confettti/src/lib/layout.component';
@@ -12,7 +12,7 @@ import {LineChartDemoComponent} from './charts/line-chart/line-chart.component';
 import {NgIf} from '@angular/common';
 @Component({
   selector: 'app-root',
-  imports: [RouterOutlet, ConfettiLayout, RouterLink, ConfettiLayout, NgChartsModule, ChartComponent, PieChartComponent, LineChartDemoComponent, NgIf],
+  imports: [RouterOutlet, ConfettiLayout, RouterLink, ConfettiLayout, NgChartsModule, ChartComponent, PieChartComponent, LineChartDemoComponent, NgIf, FillersContainerComponent, AddApplicationComponent, AddResponseComponent],
   templateUrl: './app.component.html',
   styleUrl: './app.component.scss'
 })
@@ -22,6 +22,8 @@ export class AppComponent {
 
   @ViewChild('modalContainer', { read: ViewContainerRef }) modalContainer!: ViewContainerRef;
   sidebar: boolean = false;
+  addApplication: boolean = false;
+  addResponse: boolean = false;
 
   openModal() {
     const modalRef = this.modalContainer.createComponent(ModalComponent);
@@ -29,5 +31,11 @@ export class AppComponent {
     modalRef.instance.close.subscribe(() => {
       modalRef.destroy();
     });
+  }
+
+  closeModal() {
+    console.log("close modal")
+    this.addApplication = false;
+    this.addResponse = false;
   }
 }

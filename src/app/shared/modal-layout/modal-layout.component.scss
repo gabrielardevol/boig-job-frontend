@@ -1,0 +1,12 @@
+  .modal-footer {
+    @apply modal-outline;
+    padding: 12px;
+    background-color: rgba(255, 255, 255, 0.6);
+    position: sticky;
+    bottom: 0;
+    border-top: 1px solid var(--border-color);
+    display: flex;
+    gap: 8px;
+    justify-content: end;
+    backdrop-filter: blur(1px);
+  }

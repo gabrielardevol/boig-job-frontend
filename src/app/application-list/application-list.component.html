@@ -1,9 +1,15 @@
+<div style="height: 0; position:sticky; top: var(--navbar-height); z-index: 2;" *ngIf="modal" >
+  <div class="modal-backdrop" (click)="modal = false" style="z-index: 2; position: relative; height: calc(100vh - var(--navbar-height))">
+    <confetti-fillers-container>
+      <app-offer-view (click)="$event.stopPropagation()" class="card modal-outline" style="width: 80%; max-height: 70vh; background: white; overflow: auto" [offer]="selectedOffer" *ngIf="selectedOffer"/>
+    </confetti-fillers-container>
+  </div>
+</div>
 
-<div style="background: blue; display: flex; flex-flow: column; min-height: calc(100vh - 51px)">
 
-  <div style="position: sticky; display: flex; gap: 6px; top: 51px; padding: 8px; border-bottom: 1px solid black;  background: white; width: 100%">
-    <button (click)="viewType = 'mozaik'">mozaik view</button>
-    <button (click)="viewType = 'table'">table view</button>
+<div style="display: flex; flex-flow: column; min-height: calc(100vh - var(--navbar-height))">
+
+  <nav class="nav-styled" style="position: sticky; display: flex; justify-content: space-between; padding: 8px 8px; gap: 6px; top: var(--navbar-height);">
     <div>Sort by
       <select name="sortBy" #sortSelector (change)="sortOffers()">
         <option value="appliedAt" selected>Date</option>
@@ -11,23 +17,20 @@
         <option value="state">State</option>
       </select>
     </div>
-
-  </div>
-
-  <div *ngIf="viewType === 'mozaik' && !loading" style="flex: 1; display: grid; grid-template-columns: 1fr 1fr 1fr 1fr; gap: 1px; background: black">
-    <div *ngFor="let offer of offers" style="display: flex; flex-flow: column; background: white;
-  padding: 6px"
-         [style.color]="offer.state == 'inProcess' ? 'blue' : offer.state == 'rejected' ? 'red' : 'black'"
-         [style.outline]="offer.state == 'inProcess' ? '1px solid blue' : offer.state == 'rejected' ? '1px solid red' : ''"
-    >
-      {{ offer.company }}
-      <br>
-      {{ offer.role }}
-      <br>
-      {{ offer.appliedAt }}
-      <br>
-      {{ offer.state }}
+    <div style="display: flex; gap: 6px;">
+      <button (click)="viewType = 'mozaik'">mozaik view</button>
+      <button (click)="viewType = 'table'">table view</button>
     </div>
+
+  </nav>
+
+  <div *ngIf="viewType === 'mozaik' && !loading" style="padding: 12px; flex: 1; gap: 6px; display: grid; grid-template-columns: 1fr 1fr 1fr 1fr;">
+    <app-offer-card *ngFor="let offer of offers" [offer]="offer" (click)="modal = true; selectedOffer = offer" style="height: 100%"/>
+  </div>
+  <div *ngIf="loading || modal" class="modal-backdrop" style="flex: 1; height: 100%; width: 100%; display: flex; justify-content: center; align-items: center">
+
+    <span *ngIf="loading">Loading...</span>
+
   </div>
   <table *ngIf="viewType === 'table'  && !loading" style="width: 100%; flex: 1">
     <thead>
@@ -47,13 +50,10 @@
     </tr>
     </tbody>
   </table>
-  <div *ngIf="loading" style="flex: 1; height: 100%; width: 100%; background: red; display: flex; justify-content: center; align-items: center">
-    loading
-  </div>
-  <div style="background: white; border-top: 1px solid black; padding: 8px; position: sticky; bottom: 0; width: 100%;">
+  <nav class="nav-styled" style="padding: 8px; position: sticky; bottom: 0; width: 100%;">
     <button *ngIf="totalOffers > page * itemsPerPage" (click)="loading = true; page = page + 1; callApi()">next</button>
     &nbsp; &nbsp; &nbsp;
     <button *ngIf="page > 1" (click)="loading = true; page = page - 1; callApi()">prev</button>
-  </div>
+  </nav>
 
 </div>

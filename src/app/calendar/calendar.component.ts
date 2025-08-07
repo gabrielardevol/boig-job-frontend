@@ -1,55 +1,86 @@
 import {Component} from '@angular/core';
-import {NgForOf, NgIf} from '@angular/common';
+import {NgClass, NgForOf, NgIf} from '@angular/common';
 import {BackendApiService} from '../core/backend.api';
+import {FillersContainerComponent} from 'confettti';
+import {OfferViewComponent} from '../application-list/offer-view/offer-view.component';
+import {InterviewViewComponent} from './interview-view/interview-view.component';
+import {Assignment, Interview} from '../core/domain.models';
+import {AssignmentViewComponent} from './assignment-view/assignment-view.component';
 
 @Component({
   selector: 'app-calendar',
   imports: [
     NgForOf,
-    NgIf
+    NgIf,
+    NgClass,
+    FillersContainerComponent,
+    OfferViewComponent,
+    InterviewViewComponent,
+    AssignmentViewComponent
   ],
   templateUrl: './calendar.component.html',
   styleUrl: './calendar.component.scss'
 })
 export class CalendarComponent {
-  currentMonth: number;
+  displayedMonth: number;
   currentDay: number;
   currentYear: number;
-  daysInMonth: number[] = []
+  daysInMonth: number[] = [];
+  currentMonth = new Date().getMonth();
+  months = ['january', 'february', 'march', 'april', 'may', 'june', 'july', 'august', 'september', 'october', 'november', 'december']
 
-  calendarEvents: { name: string, date: Date, [key: string]: any }[] = []
+  interviews: Interview[] = []
+  assignments: Assignment[] = []
+
+  toDo: any;
+  selectedInterview: Interview | undefined;
+  selectedAssignment: Assignment | undefined;
 
   constructor(backendApi: BackendApiService) {
-    backendApi.getAllEvents().subscribe(calendarEvents => {
-      const parsed = calendarEvents['member'].map(e => ({
+    const today = new Date();
+    this.displayedMonth = today.getMonth(); // Els mesos comencen en 0 (0 = gener)
+    this.currentDay = today.getDate();
+    this.currentYear = today.getFullYear();
+
+    backendApi.getAllInterviews().subscribe(response => {
+      const parsed = response['member'].map(e => ({
         ...e,
         date: new Date(e.date)
       }));
-     console.log(parsed);
-     this.calendarEvents = parsed;
-     console.log(this.calendarEvents)
+      this.interviews = parsed;
     })
 
-    const today = new Date();
-    this.currentMonth = today.getMonth() + 1; // Els mesos comencen en 0 (0 = gener)
-    this.currentDay = today.getDate();
-    this.currentYear = today.getFullYear();
-    this.generateCalendar(this.currentYear, this.currentMonth - 1);
-    console.log(this.calendarEvents)
+    backendApi.getAllAssignments().subscribe(response => {
+      const parsed = response['member'].map(e => ({
+        ...e,
+        date: new Date(e.date)
+      }));
+      this.assignments = parsed;
+    })
+
+    this.generateCalendar(this.currentYear, this.displayedMonth);
+
   }
+
 
   generateCalendar(year: number, month: number): void {
-    const firstDay = new Date(year, month, 1).getDay(); // Dia de la setmana del dia 1
-    const daysInMonth = new Date(year, month + 1, 0).getDate(); // Total de dies del mes
+    let firstDay = new Date(year, month, 1).getDay(); // Dia de la setmana del dia 1
+    firstDay = (firstDay === 0) ? 6 : firstDay - 1; // ara 0 = dl, 6 = dg
+    const daysInMonth = new Date(year, month, 0).getDate(); // Total de dies del mes
     const blanks = Array(firstDay).fill(null); // Dies buits al principi
-    this.daysInMonth = [...blanks, ...Array.from({ length: daysInMonth }, (_, i) => i + 1)];
+    this.daysInMonth = [...blanks, ...Array.from({length: daysInMonth}, (_, i) => i + 1)];
   }
 
-  changeMonth(interval: number) :void {
-    this.currentMonth += interval;
-    if (this.currentMonth == 0 ){this.currentMonth = 12;  this.currentYear -= 1}
-    else if (this.currentMonth == 13){this.currentMonth = 1; this.currentYear += 1}
-    this.generateCalendar(this.currentYear, this.currentMonth);
+  changeMonth(interval: number): void {
+    this.displayedMonth += interval;
+    if (this.displayedMonth == 0) {
+      this.displayedMonth = 12;
+      this.currentYear -= 1
+    } else if (this.displayedMonth == 13) {
+      this.displayedMonth = 1;
+      this.currentYear += 1
+    }
+    this.generateCalendar(this.currentYear, this.displayedMonth);
   }
 
 }

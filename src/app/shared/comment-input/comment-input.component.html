@@ -1,0 +1,6 @@
+<div *ngFor="let comment of comments">{{comment.content + comment.createdAt}}</div>
+
+<form #jobForm="ngForm" (ngSubmit)="onSubmit(jobForm.value)" style="display: flex">
+  <input ngModel type="text" name="content">
+  <button>send</button>
+</form>

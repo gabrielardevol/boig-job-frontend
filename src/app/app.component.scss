@@ -1,1 +1,27 @@
+button {
+  cursor: pointer;
+}
+
+aside {
+  button {
+    margin: 0 4px;
+  }
+
+  button.menu {
+    margin: 0;
+    border: none;
+    width: 100%;
+    background: var(--background-color);
+    font-size: 0.9rem;
+    padding: 12px;
+    color: black;
+    border-radius: 0;
+  }
+
+  button.menu:hover {
+    background: rgba(0, 0, 0, 0.04);
+    border-radius: 4px;
+  }
+}
+
 

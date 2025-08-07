@@ -18,22 +18,26 @@ import {PieChartComponent} from "../charts/pie-chart/pie-chart.component";
 })
 export class DashboardComponent {
 
+  GAP: string = '1px';
+  ROUNDED: string = '8px';
   skills: {skill: string, count: any}[] = [];
-  offersByDay: {day: string | Date; count: number}[] = [];
+  offersByDay: {day: Date; count: number}[] = [];
+  responsesByDay: {day: Date; count: number}[] = []
+  kpiData: { [p: string]: any } = {};
 
   constructor(backendApi: BackendApiService) {
-    backendApi.dashboardGetSkills().subscribe(skills => {
-      // this.offers = offers;
-      this.skills = Object.entries(skills[0]).map(([key, value]) => ({
-        skill: key,
-        count: value
-      }));
-    })
-
-    backendApi.getOffersByDay().subscribe(offersByDay => {
-      this.offersByDay = offersByDay[0];
-      console.log(this.offersByDay)
-    })
+    backendApi.getDashboard().subscribe(
+      dashboardData => {
+        console.log(dashboardData)
+        this.skills = Object.entries(dashboardData.skillFrequency).map(([key, value]) => ({
+          skill: key,
+          count: value
+        }));
+        this.offersByDay = dashboardData.offersByDay;
+        this.responsesByDay = dashboardData.responsesByDay;
+        this.kpiData = dashboardData.kpiData;
+      }
+    )
   }
 
   protected readonly Object = Object;
